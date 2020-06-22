@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+</head>
+
+<body>
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-danger">
+        {{ message }}
+    </div>
+    {% endfor %} {% endif %}
+    <div class="login-form">
+        <form action="{% url 'Login' %}" method="post">
+            {% csrf_token %}
+            <div class="avatar"><i class="material-icons">&#xE7FF;</i></div>
+            <h4 class="modal-title">Login to Your Account</h4>
+            <div class="form-group">
+                <label for="recipient-name">User Name</label>
+                <input type="text" class="form-control" placeholder="User Name" name="uname" required="required">
+            </div>
+            <div class="form-group">
+                <label for="recipient-name1">Password</label>
+                <input type="password" class="form-control" placeholder="Password" name="pass" required="required">
+            </div>
+            <div>
+                <input type="submit" value="Login" style="margin-left: 100px;">
+            </div>
+        </form>
+        <div class="text-center small">Don't have an account? <a href="{% url 'Register' %}">Registation</a></div>
+    </div>
+</body>
+
+</html>

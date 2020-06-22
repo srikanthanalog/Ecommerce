@@ -1,0 +1,133 @@
+{% extends 'store/main.html' %} {%load static %} {% block content %}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Checkout</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="single-product.html">Checkout</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Checkout Area =================-->
+{% if user.is_authenticated %}
+<section class="checkout_area section_gap">
+    <div class="container">
+        <div class="billing_details">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h3>Billing Details</h3>
+                    <form class="row contact_form" id="form" method="post" novalidate="novalidate">
+                        {% csrf_token %}
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" class="form-control" id="add1" name="address" placeholder="address" required>
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" class="form-control" id="country" name="country" placeholder="country" required>
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" class="form-control" id="state" name="state" placeholder="state" required>
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" class="form-control" id="city" name="city" placeholder="city" required>
+                        </div>
+                        <div class="col-md-6 form-group p_star">
+                            <input type="text" class="form-control" id="zip" name="zipcode" placeholder="zipcode" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-4">
+                    <div class="order_box">
+                        <h2>Your Order</h2>
+                        <ul class="list">
+                            <li><a>Product <span>Total</span></a></li>
+                            {% for item in items%}
+                            <li><a>{{item.product.name}}<span class="middle"> x {{item.quantity}}</span> <span class="last">${{item.get_total|floatformat:2}}</span></a></li>
+                            {% endfor %}
+                        </ul>
+                        <ul class="list list_2">
+                            <li><a>Subtotal <span>${{order.get_cart_total|floatformat:2}}</span></a></li>
+                            <li><a>Tax <span>${{tax|floatformat:2}}</span></a></li>
+                            <li><a>GrandTotal <span>${{grand_total|floatformat:2}}</span></a></li>
+                        </ul>
+                        <div class="box-element hidden" id="payment-info">
+                            <!-- <input id="form-button" class="primary-btn" type="submit" value="Proceed to Pay"> -->
+                            <!-- <a class="primary-btn"  href="">Proceed to Pay</a> -->
+                            <button class="primary-btn" id="make-payment">Make Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %} {% endif %}
+<!--================End Checkout Area =================-->
+<script>
+    var shipping = "{{order.shipping}}"
+    var total = "{{grand_total}}"
+
+    var form = document.getElementById('form')
+
+    document.getElementById('make-payment').addEventListener('click', function() {
+        submitFormData()
+    })
+
+    function submitFormData() {
+        console.log("paymet")
+        var userFormData = {
+            'name': null,
+            'email': null,
+            'total': total,
+        }
+
+        var shippingInfo = {
+            'address': null,
+            'city': null,
+            'state': null,
+            'contry': null,
+            'zip': null,
+        }
+
+        if (shipping != 'False') {
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.state = form.state.value
+            shippingInfo.country = form.country.value
+            shippingInfo.zipcode = form.zipcode.value
+        }
+        var url = '/process_order/'
+        fetch(url, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/Json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    'form': userFormData,
+                    'shipping': shippingInfo
+                })
+            })
+            // response to json
+            .then((response) =>
+                response.json())
+            // print backed response on console
+            .then((data) => {
+                console.log("Success:", data);
+                alert('Transaction Complated');
+                window.location.href = "{% url 'Home'%}"
+                //after Transaction complted cookies will be clear.
+                //cart = {}
+                // document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
+
+                //window.location.href = "{% url 'Home'%}"
+            })
+    }
+</script>
+{% endblock content %}

@@ -1,0 +1,119 @@
+{% extends 'store/main.html' %} {%load static %} {% block content %}
+
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+    <div class="container">
+        <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+                <h1>Shopping Cart</h1>
+                <nav class="d-flex align-items-center">
+                    <a href="{%url 'Home' %}">Home<span class="lnr lnr-arrow-right"></span></a>
+                    <a href="{%url 'Cart' %}">Cart</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Cart Area =================-->
+{% if user.is_authenticated %}
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for item in items %}
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="{{item.product.imageURL}}" style="height: 125px;width: 180px;" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <p>{{item.product.name}}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>${{item.product.price|floatformat}}</h5>
+                            </td>
+                            <td>
+                                <div class="product_count">
+                                    <div style="flex:1">
+                                        <p class="quantity">{{item.quantity}}</p>
+                                        <div class="quantity">
+                                            <img data-product={{item.product.id}} data-action="add" class="chg-quantity update-cart" src="{% static 'images/arrow-up.png' %}">
+                                            <img data-product={{item.product.id}} data-action="remove" class="chg-quantity update-cart" src="{% static 'images/arrow-down.png' %}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>${{item.get_total}}</h5>
+                            </td>
+                        </tr>
+                        {% endfor%}
+
+
+                        <tr class="bottom_button">
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <div class="cupon_text d-flex align-items-center">
+                                    <input type="text" placeholder="Coupon Code">
+                                    <a class="primary-btn" href="#">Apply</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <h5>Subtotal</h5>
+                            </td>
+                            <td>
+                                <h5>${{order.get_cart_total|floatformat:2}}</h5>
+                            </td>
+                        </tr>
+
+                        <tr class="out_button_area">
+                            <td>
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <div class="checkout_btn_inner d-flex align-items-center">
+                                    <a class="primary-btn" href="{%url 'Home' %}">Continue Shopping</a>&nbsp;
+                                    <a class="primary-btn" href="{%url 'Checkout' %}">Proceed to checkout</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %} {% endif %}
+<!--================End Cart Area =================-->
+{% endblock content %}

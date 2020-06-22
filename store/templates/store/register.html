@@ -1,0 +1,66 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+</head>
+
+<body class='body-register'>
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+    {% endfor %} {% endif %} {% block content %}
+    <div>
+        <div class="signup-form">
+            <form action="{% url 'Register' %}" method="post">
+                {% csrf_token %}
+                <h2>Register</h2>
+                <p class="hint-text">Create your account.</p>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label for="recipient-name">First Name</label>
+                            <input type="text" class="form-control" placeholder="First Name" name="fname" id="recipient-name2">
+                        </div>
+
+                        <div class="col-xs-6">
+                            <label for="recipient-name">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Last Name" name="lname" id="recipient-name3" required="required">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name">Email id</label>
+                    <input type="email" class="form-control" placeholder="Email id" name="email" id="recipient-name4" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name">Username</label>
+                    <input type="text" class="form-control" placeholder="User Name" name="username" id="recipient-name5" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name1">Password</label>
+                    <input type="password" class="form-control" placeholder="Password" name="password" id="recipient-name6" required="required">
+                </div>
+                <div>
+                    <input type="submit" value="Create account" style="margin-left: 100px;">
+                </div>
+
+            </form>
+            <div class="text-center">Already have an account? <a href="{% url 'Login' %}">Sign in</a></div>
+
+        </div>
+        {% endblock content %}
+</body>
+
+</html>
